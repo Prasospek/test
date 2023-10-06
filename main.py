@@ -7,7 +7,7 @@ from datetime import datetime, timedelta  # Import timedelta for date calculatio
 # Následně projíždí queues a porovnává (obě FIFO), je potřeba pořešit kontrolu data
 def processCSV():
     dict_of_queues = {}
-    with open('2022.csv', newline='') as csvfile:
+    with open('merge.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
         for row in reader:
             if "Market buy" in row["Action"]:
@@ -74,3 +74,5 @@ def processCSV():
 
 #if __name__ == "__main__":
 #    processCSV()
+
+processCSV()

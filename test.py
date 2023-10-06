@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 # Market buy,2022-01-03 14:30:29,US5949181045,MSFT,"Microsoft",1.3471614000,335.77,USD,1.13254,,"EUR",400.00,"EUR",,,,,,EOF1731067165,0.60,"EUR"
 # Market sell,2023-06-26 13:30:41,US5949181045,MSFT,"Microsoft",0.3264715000,333.80,USD,1.09139,3.06,"EUR",99.70,"EUR",,,,,,EOF3122300512,0.15,"EUR"
 
+#Capital Gains = (Selling Price - Buying Price) * Number of Shares Sold
+
 
 # Function to calculate taxes based on capital gains and tax rate
 def calculate_tax(capital_gains, tax_rate):
@@ -77,7 +79,7 @@ def processCSV():
                 selling_price = temp["Price"]
                 capital_gains = (selling_price - buying_price) * temp["No. of shares"]
                 # Calculate taxes based on capital gains and your local tax rate
-                tax_rate = 0.21                                                                     #  !!! Replace with your actual tax rate !!! 
+                tax_rate = 0.23                        
                 tax_amount = calculate_tax(capital_gains, tax_rate)
 
                 print("Action: Market buy" if "qBuy" in data else "Market sell")
@@ -91,5 +93,9 @@ def processCSV():
                 print("Capital Gains:", capital_gains)
                 print("Tax Amount:", tax_amount)
                 print()  # Add a line break for readability
+                
+                #test
+                print("Purchase Date:", purchase_date.strftime('%Y-%m-%d %H:%M:%S'))
+                print("Sale Date:", sale_date.strftime('%Y-%m-%d %H:%M:%S'))
 
 processCSV()
