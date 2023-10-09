@@ -10,12 +10,12 @@ from datetime import datetime, timedelta
 
 #Capital Gains = (Selling Price - Buying Price) * Number of Shares Sold
 
+#Tax rate se mění podle toho kdyz vydela nad 2miliony nebo kolik tak daní více
+
 
 # Function to calculate taxes based on capital gains and tax rate
 def calculate_tax(capital_gains, tax_rate):
     return capital_gains * tax_rate
-
-
 
 def processCSV():
     dict_of_queues = {}
@@ -73,13 +73,25 @@ def processCSV():
 
             # Check if the sale date is earlier than the tax-free date
             sale_date = datetime.strptime(temp["Time"], '%Y-%m-%d %H:%M:%S')
+            
             if sale_date < tax_free_date:
+                # The sale is tax-free
+                print("Action: Market buy" if "qBuy" in data else "Market sell")
+                print("Ticker:", ticker)
+                print("No. of shares (Bought):", data["qBuy"].queue[0]["No. of shares"])
+                print("Time (Bought):", data["qBuy"].queue[0]["Time"])
+                print("No. of shares (Sold):", temp["No. of shares"])
+                print("Time (Sold):", temp["Time"])
+                print("Result: Tax-Free")
+                print("Tax-Free Date:", tax_free_date.strftime('%Y-%m-%d %H:%M:%S'))
+                print()  # Add a line break for readability
+            else:
                 # Calculate capital gains and taxes for these shares
                 buying_price = data["qBuy"].queue[0]["Price"]
                 selling_price = temp["Price"]
                 capital_gains = (selling_price - buying_price) * temp["No. of shares"]
                 # Calculate taxes based on capital gains and your local tax rate
-                tax_rate = 0.23                        
+                tax_rate = 0.23
                 tax_amount = calculate_tax(capital_gains, tax_rate)
 
                 print("Action: Market buy" if "qBuy" in data else "Market sell")
@@ -93,9 +105,5 @@ def processCSV():
                 print("Capital Gains:", capital_gains)
                 print("Tax Amount:", tax_amount)
                 print()  # Add a line break for readability
-                
-                #test
-                print("Purchase Date:", purchase_date.strftime('%Y-%m-%d %H:%M:%S'))
-                print("Sale Date:", sale_date.strftime('%Y-%m-%d %H:%M:%S'))
 
 processCSV()
